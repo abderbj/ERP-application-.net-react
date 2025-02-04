@@ -5078,11 +5078,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bejao\\OneDrive\\Bureau\\projet .net version finale\\ERP\\api.csproj",
+      "projectUniqueName": "C:\\Users\\bejao\\OneDrive\\Bureau\\test\\testest\\ERP\\api.csproj",
       "projectName": "api",
-      "projectPath": "C:\\Users\\bejao\\OneDrive\\Bureau\\projet .net version finale\\ERP\\api.csproj",
+      "projectPath": "C:\\Users\\bejao\\OneDrive\\Bureau\\test\\testest\\ERP\\api.csproj",
       "packagesPath": "C:\\Users\\bejao\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bejao\\OneDrive\\Bureau\\projet .net version finale\\ERP\\obj\\",
+      "outputPath": "C:\\Users\\bejao\\OneDrive\\Bureau\\test\\testest\\ERP\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

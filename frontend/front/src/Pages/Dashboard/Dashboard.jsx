@@ -32,19 +32,8 @@ const Dashboard = ({
   setProducts,
 }) => {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
-
-  // Get products from firestore database
-  const getProducts = async () => {
-    const querySnapshot = await getDocs(collection(db, "products"));
-    const productsData = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    setProducts(productsData);
-  };
-
   useEffect(() => {
-    getProducts();
+    setProducts(products);
   }, []);
 
   // Calculate total number of products
@@ -76,7 +65,7 @@ const Dashboard = ({
   // Generate numeric IDs for each product
   const productsWithNumericIds = products.map((product, index) => ({
     ...product,
-    numericId: index + 1, // Assuming you want to start from 1
+    numericId: index + 1, 
   }));
 
   // Function to get the start and end dates of each week
@@ -238,7 +227,7 @@ const Dashboard = ({
                   <YAxis />
                   <Legend />
                   <Bar dataKey="price" fill="#8884d8" />
-                  <Bar dataKey="stockquantity" fill="#82ca9d" />
+                  <Bar dataKey="stock" fill="#82ca9d" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

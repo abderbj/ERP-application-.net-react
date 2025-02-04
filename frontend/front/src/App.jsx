@@ -20,8 +20,26 @@ function App() {
       status: "Processing",
     },
   ]);
+  const [products, setProducts] = useState([]);
 
-
+  const getProducts = async () => {
+    try {
+      console.log("Fetching products...");
+      
+      const response = await axios.get('http://localhost:4000/api/Product');  // Adjust the URL to your API endpoint
+      const fetchedProducts = response.data;  // Assuming the response contains an array of products
+      console.log(response.data);
+      
+      // Update the products state with the fetched products
+      setProducts(fetchedProducts);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+    useEffect(() => {
+      getProducts();  // Fetch products when the component mounts
+    }, []);
+    
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -39,8 +57,6 @@ function App() {
   const [userId, setUserId] = useState(null);  
   //passing the userId as props
 
-
-  const [products, setProducts] = useState([]);
 
 
    //sidebar open
@@ -75,7 +91,7 @@ function App() {
             <Route path="/orderscalendar" element={<OrderCalendar orders={orders} setOrders={setOrders}/>} />
           </>
         ) : (
-          <Route path="/" element={<Dashboard userId={userId} setUserId={setUserId} products={products} setProducts={setProducts} orders={orders} setOrders={setOrders}/>} />
+          <Route path="/" element={<Dashboard userId={userId} setUserId={setUserId} products={products} orders={orders} setOrders={setOrders}/>} />
         )}
       </Routes>
     </BrowserRouter>

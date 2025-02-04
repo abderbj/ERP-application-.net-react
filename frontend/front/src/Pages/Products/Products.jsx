@@ -42,46 +42,49 @@ const Products = ({ products, setProducts }) => {
   };
 
   // Delete product
-  const handleDelete = async (id) => {
-    const [productToDelete] = products.filter((product) => product.id === id);
-    
-    const result = await Swal.fire({
-      icon: "warning",
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      confirmButtonColor: "red",
-      cancelButtonText: "No, cancel!",
-    });
-  
-    if (result.isConfirmed) {
-      try {
-        await deleteDoc(doc(db, "products", id));
-        
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: `${productToDelete.productname} ${productToDelete.category}'s data has been deleted.`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-  
-        // Update the products state by filtering out the deleted product
-        const updatedProducts = products.filter((product) => product.id !== id);
-        setProducts(updatedProducts);
-      } catch (error) {
-        console.error("Error deleting document: ", error);
-        Swal.fire({
-          icon: "error",
-          title: "Failed!",
-          text: `${productToDelete.productname} ${productToDelete.category}'s data could not be deleted.`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
+  // Delete product
+const handleDelete = async (id) => {
+  const [productToDelete] = products.filter((product) => product.id === id);
+
+  const result = await Swal.fire({
+    icon: "warning",
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    confirmButtonColor: "red",
+    cancelButtonText: "No, cancel!",
+  });
+
+  if (result.isConfirmed) {
+    try {
+      // Make a DELETE request to the API
+      await axios.delete(`http://localhost:4000/api/Product/${id}`);
+
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: `${productToDelete.name} from ${productToDelete.category} has been deleted.`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      // Update the state to remove the deleted product
+      const updatedProducts = products.filter((product) => product.id !== id);
+      setProducts(updatedProducts);
+    } catch (error) {
+      console.error("Error deleting product: ", error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: `Could not delete ${productToDelete.name}. Please try again later.`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
-  };
+  }
+};
+
 
   return (
     <div className="container" style={{ marginTop: "70px" }}>
