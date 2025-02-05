@@ -22,14 +22,12 @@ namespace YourNamespace.Controllers
             _roleManager = roleManager;
         }
 
-        // Register Model
         public class RegisterModel
         {
             public string Email { get; set; }
             public string Password { get; set; }
         }
 
-        // Register API
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
@@ -48,14 +46,12 @@ namespace YourNamespace.Controllers
             return BadRequest(result.Errors);
         }
 
-        // Login Model
         public class LoginModel
         {
             public string Email { get; set; }
             public string Password { get; set; }
         }
 
-        // Login API
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -65,13 +61,12 @@ namespace YourNamespace.Controllers
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
             if (result.Succeeded)
             {
-                return Ok(new { userId = user.Id }); // Return user ID
+                return Ok(new { userId = user.Id });
             }
 
             return BadRequest("Invalid login attempt.");
         }
 
-        // Create Role API
         [HttpPost("create-role")]
         public async Task<IActionResult> CreateRole(string roleName)
         {
@@ -100,36 +95,34 @@ namespace YourNamespace.Controllers
         }
 
         [HttpPost("get-user-roles")]
-public async Task<IActionResult> GetUserRoles([FromBody] GetUserRolesRequest request)
-{
-    if (string.IsNullOrEmpty(request.Email))
-    {
-        return BadRequest("Email is required.");
-    }
+        public async Task<IActionResult> GetUserRoles([FromBody] GetUserRolesRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest("Email is required.");
+            }
 
-    var user = await _userManager.FindByEmailAsync(request.Email);
-    if (user == null)
-    {
-        return NotFound("User not found.");
-    }
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
 
-    
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(roles);
+        }
 
-    var roles = await _userManager.GetRolesAsync(user);
-    return Ok(roles);
-}
-public class GetUserRolesRequest
-{
-    public string Email { get; set; }
-}
-        // Define the model for JSON request body
+        public class GetUserRolesRequest
+        {
+            public string Email { get; set; }
+        }
+
         public class AssignRoleModel
         {
             public string Email { get; set; }
             public string RoleName { get; set; }
         }
 
-        // Logout API
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {

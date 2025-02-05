@@ -17,27 +17,28 @@ const AddUser = () => {
     }
 
     try {
-      // Register user
-      const registerResponse = await axios.post("http://localhost:4000/api/Account/register", { 
-        email, 
-        password 
-      });
+      const registerResponse = await axios.post(
+        "http://localhost:4000/api/Account/register",
+        {
+          email,
+          password,
+        }
+      );
 
       if (registerResponse.status === 200) {
-        // Assign role
-        const roleResponse = await axios.post("http://localhost:4000/api/Account/assign-role", {
-          email, 
-          roleName: role 
-        });
+        const roleResponse = await axios.post(
+          "http://localhost:4000/api/Account/assign-role",
+          {
+            email,
+            roleName: role,
+          }
+        );
 
         if (roleResponse.status === 200) {
           swal("Success!", `${email} has been added as ${role}.`, "success");
-          
-          // Clear form fields after successful submission
           setEmail("");
           setPassword("");
           setRole("Product Manager");
-
         } else {
           throw new Error("Failed to assign role.");
         }
@@ -46,20 +47,41 @@ const AddUser = () => {
       }
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
-      swal("Error!", `Failed to add the user. ${error.response?.data || error.message}`, "error");
+      swal(
+        "Error!",
+        `Failed to add the user. ${error.response?.data || error.message}`,
+        "error"
+      );
     }
   };
 
   return (
-    <div className="small-container" style={{ paddingLeft: "300px", paddingRight: "50px", paddingTop: "100px" }}>
+    <div
+      className="small-container"
+      style={{
+        paddingLeft: "300px",
+        paddingRight: "50px",
+        paddingTop: "100px",
+      }}
+    >
       <form onSubmit={handleAddUser}>
         <h4>Add User</h4>
 
         <label>Email</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
         <label>Password</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <label>Role</label>
         <select value={role} onChange={(e) => setRole(e.target.value)}>
@@ -69,7 +91,9 @@ const AddUser = () => {
         </select>
 
         <div style={{ marginTop: "30px" }}>
-          <Button type="submit" variant="success">Add User</Button>
+          <Button type="submit" variant="success">
+            Add User
+          </Button>
           <button
             type="button"
             style={{
