@@ -37,8 +37,8 @@ const Header = ({ userId, setUserId, open, setOpen }) => {
       const response = await axios.post(
         "http://localhost:4000/api/Account/login",
         {
-          email: "a@gmail.com",
-          password: "00Klù%s5",
+          username: user.email, // Updated to "username"
+          password: user.password,
 
         }
       );
@@ -50,7 +50,7 @@ const Header = ({ userId, setUserId, open, setOpen }) => {
         console.log("Login successful, User ID:", newUserId);
   
         setShow(false); // Close modal
-        navigate("/products"); // Redirect after login
+        navigate("/dashboard"); // Redirect after login
       } else {
         alert("Invalid email or password");
       }
