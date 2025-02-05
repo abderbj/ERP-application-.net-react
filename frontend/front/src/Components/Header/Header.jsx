@@ -50,7 +50,7 @@ const Header = ({ userId, setUserId, open, setOpen }) => {
         console.log("Login successful, User ID:", newUserId);
   
         setShow(false); // Close modal
-        navigate("/dashboard"); // Redirect after login
+        navigate("/"); // Redirect after login
       } else {
         alert("Invalid email or password");
       }
