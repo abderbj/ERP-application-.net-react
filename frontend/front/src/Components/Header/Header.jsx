@@ -37,7 +37,7 @@ const Header = ({ userId, setUserId, open, setOpen }) => {
       const response = await axios.post(
         "http://localhost:4000/api/Account/login",
         {
-          username: user.email, // Updated to "username"
+          email: user.email, // Updated to "username"
           password: user.password,
 
         }
