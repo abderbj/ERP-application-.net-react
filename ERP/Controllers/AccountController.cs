@@ -84,20 +84,49 @@ namespace YourNamespace.Controllers
             return BadRequest("Role already exists.");
         }
 
-        // Assign Role to User API
         [HttpPost("assign-role")]
-        public async Task<IActionResult> AssignRole(string email, string roleName)
+        public async Task<IActionResult> AssignRole([FromBody] AssignRoleModel model)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return BadRequest("User not found.");
 
-            if (!await _roleManager.RoleExistsAsync(roleName))
+            if (!await _roleManager.RoleExistsAsync(model.RoleName))
             {
                 return BadRequest("Role does not exist.");
             }
 
-            await _userManager.AddToRoleAsync(user, roleName);
+            await _userManager.AddToRoleAsync(user, model.RoleName);
             return Ok("Role assigned to user.");
+        }
+
+        [HttpPost("get-user-roles")]
+public async Task<IActionResult> GetUserRoles([FromBody] GetUserRolesRequest request)
+{
+    if (string.IsNullOrEmpty(request.Email))
+    {
+        return BadRequest("Email is required.");
+    }
+
+    var user = await _userManager.FindByEmailAsync(request.Email);
+    if (user == null)
+    {
+        return NotFound("User not found.");
+    }
+
+    
+
+    var roles = await _userManager.GetRolesAsync(user);
+    return Ok(roles);
+}
+public class GetUserRolesRequest
+{
+    public string Email { get; set; }
+}
+        // Define the model for JSON request body
+        public class AssignRoleModel
+        {
+            public string Email { get; set; }
+            public string RoleName { get; set; }
         }
 
         // Logout API
