@@ -22,17 +22,24 @@ namespace YourNamespace.Controllers
             _roleManager = roleManager;
         }
 
+        // Register Model
+        public class RegisterModel
+        {
+            public string Email { get; set; }
+            public string Password { get; set; }
+        }
+
         // Register API
         [HttpPost("register")]
-        public async Task<IActionResult> Register(string email, string password)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             var user = new IdentityUser
             {
-                UserName = email,
-                Email = email
+                UserName = model.Email,
+                Email = model.Email
             };
 
-            var result = await _userManager.CreateAsync(user, password);
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 return Ok("User registered successfully.");
@@ -41,15 +48,25 @@ namespace YourNamespace.Controllers
             return BadRequest(result.Errors);
         }
 
+        // Login Model
+        public class LoginModel
+        {
+            public string Email { get; set; }
+            public string Password { get; set; }
+        }
+
         // Login API
         [HttpPost("login")]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null) return BadRequest("Invalid email or password.");
 
-            var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
-            if (result.Succeeded) return Ok("Logged in successfully.");
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+            if (result.Succeeded)
+            {
+                return Ok(new { userId = user.Id }); // Return user ID
+            }
 
             return BadRequest("Invalid login attempt.");
         }
@@ -82,6 +99,8 @@ namespace YourNamespace.Controllers
             await _userManager.AddToRoleAsync(user, roleName);
             return Ok("Role assigned to user.");
         }
+
+        // Logout API
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
